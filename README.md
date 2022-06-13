@@ -47,15 +47,15 @@ You can now install the required libraries inside your virtual environment with:
 > pip install -r requirements.txt
 
 -----
-## Example usage
-Help:
+## Script usage example
+Display the help:
 > python TabularNCD.py -h
 
 Execution with the optimized hyper-parameters:
 > python TabularNCD.py --dataset_name Pendigits --hyper_parameters_path auto
 
 **Note :**
-If you don't use the optimized hyper-parameters with the value (or any other file), 
+If you don't use the optimized hyper-parameters with the 'auto' value (or any other file), 
 and that you don't define values, 
 the scrip will use the default values and will most likely have poor performance.
 
@@ -102,13 +102,13 @@ The parameters of the TabularNCD.py script are:
     ├── requirements.txt               <- The required packages
     ├── TabularNCD.py                  <- The main script to launch
     ├── data                           <- The datasets (train & test) in csv, along with the hyper-parameters and links to download
-    │   ├── ForestCoverType
-    │   ├── HumanActivityRecognition
-    │   ├── LetterRecognition
-    │   ├── mnist
-    │   ├── Pendigits
-    │   ├── Satimage
-    │   └── USCensus1990               <- File is too large and down is needed
+    │   ├── ForestCoverType            <- File is too large, please download and pre-process it before using dataset
+    │   ├── HumanActivityRecognition   <- File is too large, please download and pre-process it before using dataset
+    │   ├── LetterRecognition          <- Dataset available
+    │   ├── mnist                      <- Dataset available
+    │   ├── Pendigits                  <- Dataset available
+    │   ├── Satimage                   <- Dataset available
+    │   └── USCensus1990               <- File is too large, please download and pre-process it before using dataset
     ├── figures                        <- 
     └── src                            <- 
         ├── import_utils.py            <- 
