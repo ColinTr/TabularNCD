@@ -1,0 +1,95 @@
+Documentation for data set
+
+1. Title of Data Set
+>
+USCensus1990raw
+
+2. Data Type
+>
+Multivariate
+
+3. Abstract
+>
+
+The USCensus1990raw data set was obtained from the (U.S. Department of
+Commerce) Census Bureau website using the Data Extraction System. This
+system can be found at http://www.census.gov/DES/www/des.html.
+
+The USCensus1990raw data set contain a one percent sample of the
+Public Use Microdata Samples (PUMS) person records drawn from the full
+1990 census sample (all fifty states and the District of Columbia but
+not including "PUMA Cross State Lines One Percent Persons Records"). A
+description of the fields and the coding of the values can be found in
+the files attributes.txt and coding.htm, respectively. Additional
+information can be found at the Census bureau website described above.
+
+NOTE: The order of the USCensus1990raw data set has not been randomized.
+
+
+4. Sources
+   (a) Original owners of database (name/snail address/phone/email/homepage)
+>
+
+The U.S. Department of Commerce Bureau
+of Census. The data was extracted using the Data Extraction
+System. This system can be found at http://www.census.gov/DES/www/des.html.
+The email contact information is webmaster@census.gov.
+
+   (b) Donor of database (name/snail address/phone/email/homepage)
+>
+
+Chris Meek         meek@microsoft.com
+Bo Thiesson        thiesson@microsoft.com
+David Heckerman    heckerma@microsoft.com
+
+5. Data Characteristics
+>
+
+The data set was collected as part of the 1990 census.
+
+>
+
+There are continuous, ordinal and categorical attributes. A
+description of the fields and the coding of the values can be found in
+the files USCensus1990raw.Attributes.txt and USCensus1990raw.coding.htm.
+
+6. Other Relevant Information
+
+>
+
+Hierarchies of values are provided in the file USCensus1990raw.coding.htm.
+
+7. Data Format
+>
+
+The data is contained in a file called USCensus1990raw.data.txt.  The
+data is in the original format provided by the Bureau of Census and is
+tab delimited with one case per row. The order of the variables is the
+order given in the file USCensus1990raw.attributes.txt.
+
+
+8. Past Usage
+>
+
+9. Acknowledgements, Copyright Information, and Availability
+  (a) copyright information
+>
+  (b) usage restrictions (e.g. for research only)
+>
+  (c) citation requests
+>
+  (d) acknowledgements
+>
+
+10. References & Further Information
+
+>
+
+The U.S. Department of Commerce Bureau of Census website
+http://www.census.gov and the Data Extraction System at
+http://www.census.gov/DES/www/des.html.
+
+Meek, Thiesson, and Heckerman (2001), "The Learning Curve Method
+Applied to Clustering", to appear in The Journal of Machine Learning
+Research. (Also see MSR-TR-2001-34 available at
+http://research.microsoft.com/scripts/pubs/view.asp?TR_ID=MSR-TR-2001-34)
