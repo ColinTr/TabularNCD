@@ -2,12 +2,13 @@
 
 Table of contents
   * [How the method works](#how-the-method-works)
-  * [Note : Virtualenv creation and packages installation](#note---virtualenv-creation-and-packages-installation)
+  * [Virtualenv creation and packages installation](#virtualenv-creation-and-packages-installation)
   * [Script usage example](#script-usage-example)
   * [Detailed usage](#detailed-usage)
   * [Directory structure](#directory-structure)
   * [Explored hyper-parameters values ranges](#explored-hyper-parameters-values-ranges)
-  * 
+
+
 -----
 ## How the method works
 
@@ -36,7 +37,7 @@ ToDo : Describe the rest of the training process here...
 **Note:** The ranges of values explored in the hyper-parameters Bayesian search are found at the end of this document.
 
 -----
-## Note : Virtualenv creation and packages installation
+## Virtualenv creation and packages installation
 This project was written using **python 3.7.9**. The libraries are described in requirements.txt.
 
 It is recommended to create a virtual environment with *virtualenv* to install the exact versions of the packages used in this project.
