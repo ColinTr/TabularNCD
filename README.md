@@ -1,4 +1,4 @@
-# TabularNCD : An adaptation of AutoNovel for tabular data
+# TabularNCD : A Method for Discovering Novel Classes in Tabular Data
 
 -----
 ## How the method works
