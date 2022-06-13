@@ -1,5 +1,13 @@
-# TabularNCD : A Method for Discovering Novel Classes in Tabular Data
+# TabularNCD :  A Method for Discovering Novel Classes in Tabular Data
 
+Table of contents
+  * [How the method works](#how-the-method-works)
+  * [Note : Virtualenv creation and packages installation](#note---virtualenv-creation-and-packages-installation)
+  * [Script usage example](#script-usage-example)
+  * [Detailed usage](#detailed-usage)
+  * [Directory structure](#directory-structure)
+  * [Explored hyper-parameters values ranges](#explored-hyper-parameters-values-ranges)
+  * 
 -----
 ## How the method works
 
