@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     setup_logging_level(args.log_lvl)
 
-    logging.info("Importing" + args.dataset_name + "...")
+    logging.info("Importing " + args.dataset_name + "...")
     x_train, y_train, x_unlab, y_unlab, x_test, y_test, x_full, y_full, y_full_classifier, y_train_classifier, y_test_classifier, grouped_unknown_class_val, classifier_mapping_dict, cat_columns_indexes = import_dataset_with_name(args.dataset_name, device)
 
     # Read the hyper-parameters file:
@@ -175,12 +175,12 @@ if __name__ == '__main__':
     logging.info(model)
 
     # ==================== Step 1 - Self-Supervised Learning ====================
-    if config['use_ssl'] == 'True':
+    if config['use_ssl'] == 'True' or config['use_ssl'] is True:
         logging.info('Starting self-supervised learning...')
         vime_losses_dict = vime_training(x_full, x_test, model, device, p_m=config['p_m'], alpha=config['alpha'],
                                          lr=args.ssl_lr)
 
-        if config['freeze_weights'] is True:
+        if config['freeze_weights'] == 'True' or config['freeze_weights'] is True:
             # /!\ If we used self-supervised learning, we freeze all but the last layer of the encoder
             for name, param in list(model.encoder.named_parameters())[:-2]:
                 param.requires_grad = False

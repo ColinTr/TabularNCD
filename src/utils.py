@@ -25,11 +25,11 @@ def setup_device(use_cuda=True):
             os.environ["CUDA_VISIBLE_DEVICES"] = ""
     else:
         device_name = "cuda:0"
-        logging.info("CUDA successfully initialized on device : " + torch.cuda.get_device_name())
+        logging.info("CUDA successfully initialized on device: " + torch.cuda.get_device_name())
 
     device = torch.device(device_name)
 
-    logging.info("Using device : " + device.type)
+    logging.info("Using device: " + device.type)
 
     return device
 

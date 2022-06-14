@@ -321,11 +321,11 @@ def complete_import_procedure(x_train, y_train, x_unlab, y_unlab, x_test, y_test
     y_full_classifier = y_full_classifier[p]
     y_train_classifier = y_train_classifier[p]
 
-    logging.info("Known classes :" + str(np.unique(y_train)))
-    logging.info("Unknown classes :" + str(np.unique(y_unlab)))
-    logging.info("x_train shape :" + str(x_train.shape))
-    logging.info("x_unlab shape :" + str(x_unlab.shape))
-    logging.info("x_test shape :" + str(x_test.shape))
+    logging.info("Known classes: " + str(np.unique(y_train)))
+    logging.info("Unknown classes: " + str(np.unique(y_unlab)))
+    logging.info("x_train shape: " + str(x_train.shape))
+    logging.info("x_unlab shape: " + str(x_unlab.shape))
+    logging.info("x_test shape: " + str(x_test.shape))
 
     logging.info("Share of unlabelled data: {:.2f}".format((len(x_unlab) / (len(x_train) + len(x_unlab))) * 100) + "%")
 

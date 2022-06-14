@@ -35,11 +35,11 @@ def joint_training(model, x_full, y_train_classifier, x_unlab, y_unlab, x_test, 
     if config['pseudo_labels_method'] == 'top_k_cosine_faster':
         max_topk = (config['batch_size'] * (config['batch_size'] - 1)) / 2
         computed_topk = int(max_topk * (config['cosine_topk'] / 100))
-        logging.info("Computed topk =" + str(computed_topk) + "(" + str(config['cosine_topk']) + "% of " + str(max_topk) + ")")
+        logging.info("Computed topk = " + str(computed_topk) + " (" + str(config['cosine_topk']) + "% of " + str(max_topk) + ")")
     elif config['pseudo_labels_method'] == 'top_k_cosine_per_instance':
         max_topk = config['batch_size'] / 2
         computed_topk = int(max_topk * (config['cosine_topk'] / 100))
-        logging.info("Computed topk =" + str(computed_topk) + "(" + str(config['cosine_topk']) + "% of " + str(max_topk) + ")")
+        logging.info("Computed topk = " + str(computed_topk) + " (" + str(config['cosine_topk']) + "% of " + str(max_topk) + ")")
 
     losses_dict = {
         # Losses
@@ -269,11 +269,8 @@ def joint_training(model, x_full, y_train_classifier, x_unlab, y_unlab, x_test, 
         losses_dict['balanced_test_clustering_accuracy'].append(balanced_test_clustering_accuracy)
         losses_dict['balanced_train_clustering_accuracy'].append(balanced_train_clustering_accuracy)
 
-        logging.debug("Train / Test clustering accuracy = {:05.3f} / {:05.3f}".format(train_clustering_accuracy,
-                                                                                      test_clustering_accuracy))
-        logging.debug(
-            "Train / Test balanced clustering accuracy = {:05.3f} / {:05.3f}".format(balanced_train_clustering_accuracy,
-                                                                                     balanced_test_clustering_accuracy))
+        logging.debug("Train / Test clustering accuracy = {:05.3f} / {:05.3f}".format(train_clustering_accuracy, test_clustering_accuracy))
+        logging.debug("Train / Test balanced clustering accuracy = {:05.3f} / {:05.3f}".format(balanced_train_clustering_accuracy, balanced_test_clustering_accuracy))
         time.sleep(0.5)  # for tqdm pretty prints
     # ===========================================================================
 
