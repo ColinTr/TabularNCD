@@ -6,7 +6,6 @@ import torch
 def vime_loss(mask_pred, mask_true, feature_pred, batch_x_train):
     """
     Note that all the inputs should have values between 0 and 1.
-
     :param mask_pred: The predicted corruption mask, torch.Tensor of shape (n_samples, n_features).
     :param mask_true: The true corruption mask, torch.Tensor of shape (n_samples, n_features).
     :param feature_pred: The reconstructed values of x, torch.Tensor of shape (n_samples, n_features).
@@ -24,7 +23,6 @@ def unsupervised_classification_loss(y_pred_1, y_pred_2, labels, eps=1e-7):
     """
     The intuition is that for each pair of samples, if their label is 1, we want the predicted
     probability of the same class to be high, and low if their label is 0.
-
     :param y_pred_1: The raw class predictions (before softmax) of the first list of samples,
                      torch.tensor of shape (n_samples, n_classes).
     :param y_pred_2: The raw class predictions (before softmax) of the second list of samples,
@@ -40,4 +38,3 @@ def unsupervised_classification_loss(y_pred_1, y_pred_2, labels, eps=1e-7):
     x = prob_1.mul(prob_2)  # We multiply the prediction of each vector between each other (so same shape is outputted)
     x = x.sum(1)  # We sum the results of each row. If the predictions of the same class were high, the result is close to 1
     return - torch.mean(labels.mul(x.add(eps).log()) + (1 - labels).mul((1 - x).add(eps).log()))  # BCE
-

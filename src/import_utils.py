@@ -10,9 +10,25 @@ def import_dataset_with_name(dataset_name, device):
     """
     Import procedure of the individual datasets.
     This is where the number of unknown classes is defined for each dataset.
-    :param dataset_name: ToDo
-    :param device: ToDo
-    :return: ToDo
+    :param dataset_name: The name of the dataset to import. Choices: ['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition', 'Satimage', 'Pendigits', 'USCensus1990']
+    :param device: torch.device : The device.
+    :return:
+        x_train: torch.tensor: The known training data.
+        y_train: np.array: The known training labels.
+        x_unlab: torch.tensor: The unknown training data.
+        y_unlab: np.array: The unknown training labels.
+        x_test: torch.tensor: The testing data.
+        y_test: np.array: The testing labels (containing both known and unknown).
+        x_full: torch.tensor: The concatenation of x_train and x_unlab.
+        y_full: np.array: The concatenation of y_train and y_unlab.
+        y_full_classifier: np.array: The concatenation of y_train and y_unlab, where all the values of y_unlab are replaced with *grouped_unknown_class_val*.
+        y_train_classifier: np.array: The concatenation of y_train and y_unlab, where:
+            1) all the values of y_unlab are replaced with *grouped_unknown_class_val*.
+            and 2) the values of y_train were mapped to [0, |C^l|] using the inverse of *classifier_mapping_dict*.
+        y_test_classifier: np.array: The values of y_test were mapped to [0, |C^l|] using the inverse of *classifier_mapping_dict*.
+        grouped_unknown_class_val: int: The value used to replace the classes of y_unlab in y_train_classifier.
+        classifier_mapping_dict: dict: This dict can be used to map *y_train_classifier*, *y_test_classifier* and *y_full_classifier* back to its original values.
+        cat_columns_indexes: torch.tensor: The indexes of the one-hot categorical columns of the dataset.
     """
     if dataset_name == 'mnist':
         n_unknown_classes = 5
@@ -136,12 +152,17 @@ def import_split_mnist(device, n_unknown_classes, seed=0, shuffle=True):
     The values are normalized to range from 0 to 1 by dividing the original values by 255.0.
     The images are flattened to create instances of 28*28=784 features.
     The classes of train and unlab are disjoint. The test set contains all of the classes.
-
-    :param device: The device to send the dataset to, torch.device.
-    :param n_unknown_classes: int : The number of unknown classes to define (between 1 and 9), int.
-    :param seed: int : Random seed for reproducibility of the random splits, int.
+    :param device: torch.device: The device to send the dataset to.
+    :param n_unknown_classes: int : The number of unknown classes to define (between 1 and 9).
+    :param seed: int : Random seed for reproducibility of the random splits.
     :param shuffle: bool : Shuffle the classes or not.
-    :return: x_train, y_train, x_unlab, y_unlab, x_test, y_test : torch.tensor(s)
+    :return:
+        x_train: torch.tensor: The known training data.
+        y_train: np.array: The known training labels.
+        x_unlab: torch.tensor: The unknown training data.
+        y_unlab: np.array: The unknown training labels.
+        x_test: torch.tensor: The testing data.
+        y_test: np.array: The testing labels (containing both known and unknown).
     """
     x_train_, y_train_, x_test_, y_test_ = import_mnist()
 
@@ -177,8 +198,11 @@ def import_mnist():
     Simple import of the MNIST data set in tabular form.
     The values are normalized to range from 0 to 1 by dividing the original values by 255.0.
     The images are flattened to create instances of 28*28=784 features.
-
-    :return: x_train, y_train, x_test, y_test : np.array(s).
+    :return:
+        x_train: np.array: The known training data.
+        y_train: np.array: np.array: The known training labels.
+        x_test: np.array: The testing data.
+        y_test: np.array: The testing labels (containing both known and unknown).
     """
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
@@ -198,13 +222,19 @@ def import_mnist():
 
 def import_split_dataset(dataset_folder_path, device, n_unknown_classes, seed=0, shuffle=True):
     """
-    ToDo
-    :param dataset_folder_path: ToDo
-    :param device: ToDo
-    :param n_unknown_classes: ToDo
-    :param seed: ToDo
-    :param shuffle: ToDo
-    :return: ToDo
+    From a folder path, import the train and test datasets and split the classes into known and unknown to create x_train and x_unlab.
+    :param dataset_folder_path: The folder path where the treated_train.csv and treated_test.csv files are.
+    :param device: torch.device : The device.
+    :param n_unknown_classes: The number of classes to define as unknown.
+    :param seed: int: Used for reproducibility when selecting which classes are known or unknown. Only useful if *shuffle* is True.
+    :param shuffle: Whether the classes need to be shuffled or not.
+    :return:
+        x_train: torch.tensor: The known training data.
+        y_train: np.array: The known training labels.
+        x_unlab: torch.tensor: The unknown training data.
+        y_unlab: np.array: The unknown training labels.
+        x_test: torch.tensor: The testing data.
+        y_test_: The testing labels (containing both known and unknown).
     """
     train_df = pd.read_csv(dataset_folder_path + 'treated_train.csv')
     test_df = pd.read_csv(dataset_folder_path + 'treated_test.csv')
@@ -243,14 +273,29 @@ def import_split_dataset(dataset_folder_path, device, n_unknown_classes, seed=0,
 
 def complete_import_procedure(x_train, y_train, x_unlab, y_unlab, x_test, y_test):
     """
-    ToDo
-    :param x_train: ToDo
-    :param y_train: ToDo
-    :param x_unlab: ToDo
-    :param y_unlab: ToDo
-    :param x_test: ToDo
-    :param y_test: ToDo
-    :return: ToDo
+    From an imported dataset, create the necessary splits, labels transformation and dictionaries for SSL and joint learning.
+    :param x_train: torch.tensor: The known training data.
+    :param y_train: np.array: The known training labels.
+    :param x_unlab: torch.tensor: The unknown training data.
+    :param y_unlab: np.array: The unknown training labels.
+    :param x_test: torch.tensor: The testing data.
+    :param y_test: np.array: The testing labels (containing both known and unknown).
+    :return:
+        x_train: torch.tensor: The known training data.
+        y_train: np.array: The known training labels.
+        x_unlab: torch.tensor: The unknown training data.
+        y_unlab: np.array: The unknown training labels.
+        x_test: torch.tensor: The testing data.
+        y_test: np.array: The testing labels (containing both known and unknown).
+        x_full: torch.tensor: The concatenation of x_train and x_unlab.
+        y_full: np.array: The concatenation of y_train and y_unlab.
+        y_full_classifier: np.array: The concatenation of y_train and y_unlab, where all the values of y_unlab are replaced with *grouped_unknown_class_val*.
+        y_train_classifier: np.array: The concatenation of y_train and y_unlab, where:
+            1) all the values of y_unlab are replaced with *grouped_unknown_class_val*.
+            and 2) the values of y_train were mapped to [0, |C^l|] using the inverse of *classifier_mapping_dict*.
+        y_test_classifier: np.array: The values of y_test were mapped to [0, |C^l|] using the inverse of *classifier_mapping_dict*.
+        grouped_unknown_class_val: int: The value used to replace the classes of y_unlab in y_train_classifier.
+        classifier_mapping_dict: dict: This dict can be used to map *y_train_classifier*, *y_test_classifier* and *y_full_classifier* back to its original values.
     """
     # We train on both labeled and unlabed data
     x_full = torch.cat([x_train, x_unlab])

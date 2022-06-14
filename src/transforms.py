@@ -9,10 +9,10 @@ def transform_batch(batch, data_queue, device):
     """
     Slow but easily understandable non-vectorized transformation for *numerical* data only.
     Inspired from SMOTE.
-    :param batch:  torch.Tensor : The batch data to transform.
-    :param data_queue:  The labelled data stored in the lab_memory_module object.
-    :param device:  torch.device : The device.
-    :return: torch.Tensor : The transformed data.
+    :param batch: torch.tensor : The batch data to transform.
+    :param data_queue: torch.tensor: The labelled data stored in the lab_memory_module object.
+    :param device: torch.device : The device.
+    :return: torch.Tensor: The transformed data.
     """
     full_data = torch.cat([batch, data_queue])
     transformed_batch = torch.tensor([], device=device, dtype=torch.float32)
@@ -39,11 +39,11 @@ def transform_batch_vectorized(batch, data_queue, device, batch_size=100):
     Faster but harder to understand vectorized transformation for *numerical* data only.
     Inspired from SMOTE.
     See 'transform_batch' to really understand the logic.
-    :param batch:  torch.Tensor : The batch data to transform.
-    :param data_queue:  The labelled data stored in the lab_memory_module object.
-    :param device:  torch.device : The device.
-    :param batch_size: int : During computation, the batch is cut in blocs of size batch_size. If you have memory errors, reduce it.
-    :return: torch.Tensor : The transformed data.
+    :param batch: torch.tensor: The batch data to transform.
+    :param data_queue: torch.tensor: The labelled data stored in the lab_memory_module object.
+    :param device: torch.device: The device.
+    :param batch_size: int: During computation, the batch is cut in blocs of size batch_size. If you have memory errors, reduce it.
+    :return: torch.Tensor: The transformed data.
     """
     full_data = torch.cat([batch, data_queue])
 
@@ -70,14 +70,13 @@ def smotenc_transform_batch(batch, cat_features_mask, data_queue, device, k_neig
     """
     Slow but easily understandable non-vectorized transformation for mixed numerical and categorical data.
     Inspired from SMOTE-NC.
-    :param batch: torch.Tensor : The batch data to transform.
-    :param cat_features_mask: Array-like object of length (x.shape[1]). Where each element is False if this column is
-    numerical and True if categorical.
-    :param data_queue: The unlabelled data stored in the unlab_memory_module object.
-    :param device: torch.device : The device.
-    :param k_neighbors: int : The number of neighbors to consider during the transformation.
+    :param batch: torch.tensor: The batch data to transform.
+    :param cat_features_mask: Array-like object of length (x.shape[1]). Where each element is False if this column is numerical and True if categorical.
+    :param data_queue: torch.tensor: The unlabelled data stored in the unlab_memory_module object.
+    :param device: torch.device: The device.
+    :param k_neighbors: int: The number of neighbors to consider during the transformation.
     :param dist: The distance metric to use. Choices : ['cosine', 'euclidean'].
-    :return: torch.Tensor : The transformed data.
+    :return: torch.tensor: The transformed data.
     """
     full_data = torch.cat([batch, data_queue])
     transformed_batch = torch.tensor([], device=device, dtype=torch.float32)
@@ -111,21 +110,19 @@ def smotenc_transform_batch(batch, cat_features_mask, data_queue, device, k_neig
     return transformed_batch
 
 
-def smotenc_transform_batch_2(batch, cat_columns_indexes, data_queue, device, k_neighbors=5, dist='cosine',
-                              batch_size=100):
+def smotenc_transform_batch_2(batch, cat_columns_indexes, data_queue, device, k_neighbors=5, dist='cosine', batch_size=100):
     """
     Faster but harder to understand vectorized transformation for mixed numerical and categorical data.
     See 'smotenc_transform_batch' to really understand the logic.
     Inspired from SMOTE-NC.
-    :param batch: torch.Tensor : The batch data to transform.
-    :param cat_columns_indexes: Array-like object of the indexes of the categorical columns.
-    Only useful when transform_method='new_2'.
+    :param batch: torch.tensor: The batch data to transform.
+    :param cat_columns_indexes: Array-like object of the indexes of the categorical columns. Only useful when transform_method='new_2'.
     :param data_queue: The unlabelled data stored in the unlab_memory_module object.
-    :param device: torch.device : The device.
-    :param k_neighbors: int : The number of neighbors to consider during the transformation.
-    :param dist: The distance metric to use. Choices : ['cosine', 'euclidean'].
-    :param batch_size: int : During computation, the batch is cut in blocs of size batch_size. If you have memory errors, reduce it.
-    :return: torch.Tensor : The transformed data.
+    :param device: torch.device: The device.
+    :param k_neighbors: int: The number of neighbors to consider during the transformation.
+    :param dist: The distance metric to use. Choices: ['cosine', 'euclidean'].
+    :param batch_size: int: During computation, the batch is cut in blocs of size batch_size. If you have memory errors, reduce it.
+    :return: torch.tensor: The transformed data.
     """
     full_data = torch.cat([batch, data_queue])
 

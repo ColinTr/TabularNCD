@@ -8,15 +8,15 @@ class TabularNCDModel(nn.Module):
         """
         The TabularNCD model object. It is composed of 5 main networks : The *encoder*, for SSL the *mask_vector_estimator*
         and *feature_vector_estimator* and for the joint learning the *classification_head* and *clustering_head*.
-        :param encoder_layers_sizes: Size from the input to the output, not only the hidden layers.
-        :param ssl_layers_sizes: Only the hidden layers, as the input and output depend on the encoder and input vector size. This corresponds to the mask and feature vector estimators of VIME.
-        :param joint_learning_layers_sizes:  Only the hidden layers, as the input and output depend on the encoder and input vector size. This corresponds to the classification and clustering heads.
+        :param encoder_layers_sizes:  The sizes of the encoder's layers. Must include the input and output sizes.
+        :param ssl_layers_sizes: The hidden layers sizes of the mask and feature vector estimators. Do not include input and output sizes.
+        :param joint_learning_layers_sizes: The hidden layers sizes of the classification and clustering networks. Do not include input and output sizes.
         :param n_known_classes: The number of known classes, or the number of output neurons of the classification head.
-        :param n_unknown_classes:  The number of unknown classes, or the number of output neurons of the clustering head.
-        :param activation_fct: The activation function that is *between* the first and last layers of each network. Choices : ['relu', 'sigmoid', None].
-        :param encoder_last_activation_fct: The very last layer of the encoder. Choices : ['relu', 'sigmoid', None].
-        :param ssl_last_activation_fct: The very last layer of the feature estimator network. Choices : ['relu', 'sigmoid', None].
-        :param joint_last_activation_fct: The very last layer of the classification and clustering networks. Choices : ['relu', 'sigmoid', None].
+        :param n_unknown_classes: The number of unknown classes, or the number of output neurons of the clustering head.
+        :param activation_fct: The activation function used in the hidden layers of the encoder. Choices : ['relu', 'sigmoid', None].
+        :param encoder_last_activation_fct: The activation function of the very last layer of the encoder. Choices : ['relu', 'sigmoid', None].
+        :param ssl_last_activation_fct: The activation function of the very last layer of the feature estimator network. Choices : ['relu', 'sigmoid', None].
+        :param joint_last_activation_fct: The activation function of the very last layer of the classification and clustering networks. Choices : ['relu', 'sigmoid', None].
         :param p_dropout: The probability of dropout. Use p_dropout=0 for no dropout.
         """
         super(TabularNCDModel, self).__init__()

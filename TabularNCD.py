@@ -1,9 +1,8 @@
+import numpy as np
 import argparse
 import logging
 import json
 import os
-
-import numpy as np
 
 from src.utils import setup_device, plot_alternative_joint_learning_metrics, setup_logging_level
 from src.training_procedures import joint_training, vime_training
@@ -23,21 +22,20 @@ def restricted_float(x):
     except ValueError:
         raise argparse.ArgumentTypeError("%r not a floating-point literal" % (x,))
     if x < 0.0 or x > 1.0:
-        raise argparse.ArgumentTypeError("%r not in range [0.0, 1.0]"%(x,))
+        raise argparse.ArgumentTypeError("%r not in range [0.0, 1.0]" % (x,))
     return x
 
 
 def argument_parser():
     """
-        A parser to allow user to easily experiment different models along with datasets and differents parameters
+    A parser to allow the user to easily experiment different parameters along with different datasets.
     """
     parser = argparse.ArgumentParser(usage='python TabularNCD.py [dataset_name] [options]',
                                      description='This program allows to run the two training steps of TabularNCD and compute the different performance metrics.')
 
     parser.add_argument('--dataset_name', type=str, required=True,
-                        choices=['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition',
-                                 'Satimage', 'Pendigits', 'USCensus1990'],
-                        help='The name of the dataset.')
+                        choices=['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition', 'Satimage', 'Pendigits', 'USCensus1990'],
+                        help='The name of the dataset to import.')
 
     parser.add_argument('--use_cuda', type=str, default='True',
                         choices=['True', 'False'], required=False,
@@ -51,7 +49,7 @@ def argument_parser():
                         help='Path to the hyper-params file. Set to \'auto\' to find it in .\\data\\dataset_name\\hyperparameters.json')
 
     parser.add_argument('--ssl_lr', type=restricted_float, default=0.001, required=False,
-                        help='Learning rate of the mode in the self-supervised learning phase.')
+                        help='Learning rate of the self-supervised learning phase.')
 
     parser.add_argument('--lr_classif', type=float, default=0.001, required=False,
                         help='Learning rate of the classification network in the joint learning phase.')
@@ -60,40 +58,40 @@ def argument_parser():
                         help='Learning rate of the clustering network in the joint learning phase.')
 
     parser.add_argument('--encoder_layers_sizes', nargs='+', type=int, default=None, required=False,
-                        help='Todo')
+                        help=' The sizes of the encoder\'s layers. Must include the input and output sizes.')
 
     parser.add_argument('--ssl_layers_sizes', nargs='+', type=int, default=[], required=False,
-                        help='Todo')
+                        help='The hidden layers sizes of the mask and feature vector estimators. Do not include input and output sizes.')
 
     parser.add_argument('--joint_learning_layers_sizes', nargs='+', type=int, default=[], required=False,
-                        help='Todo')
+                        help='The hidden layers sizes of the classification and clustering networks. Do not include input and output sizes.')
 
     parser.add_argument('--activation_fct', type=str, default='relu', required=False,
-                        choices=['relu', 'sigmoid', 'tanh', None], help='Todo')
+                        choices=['relu', 'sigmoid', 'tanh', None], help='The activation function used in the hidden layers of the encoder.')
 
     parser.add_argument('--encoder_last_activation_fct', type=str, default=None, required=False,
-                        choices=['relu', 'sigmoid', 'tanh', None], help='Todo')
+                        choices=['relu', 'sigmoid', 'tanh', None], help='The activation function of the very last layer of the encoder.')
 
     parser.add_argument('--ssl_last_activation_fct', type=str, default=None, required=False,
-                        choices=['relu', 'sigmoid', 'tanh', None], help='Todo')
+                        choices=['relu', 'sigmoid', 'tanh', None], help='The activation function of the very last layer of the feature estimator network.')
 
     parser.add_argument('--joint_last_activation_fct', type=str, default=None, required=False,
-                        choices=['relu', 'sigmoid', 'tanh', None], help='Todo')
+                        choices=['relu', 'sigmoid', 'tanh', None], help='The activation function of the very last layer of the classification and clustering networks.')
 
     parser.add_argument('--dropout', type=restricted_float, default=0.0, required=False,
-                        help='Todo')
+                        help='The dropout probability')
 
     parser.add_argument('--p_m', type=restricted_float, default=0.3, required=False,
-                        help='Todo')
+                        help='Corruption probability')
 
     parser.add_argument('--alpha', type=float, default=2.0, required=False,
-                        help='Todo')
+                        help='Loss_vime = mask_estim_loss + alpha * feature_estim_loss')
 
     parser.add_argument('--batch_size', type=int, default=512, required=False,
                         help='Batch size of the joint learning step.')
 
     parser.add_argument('--cosine_topk', type=restricted_float, default=None, required=False,
-                        help='Todo')
+                        help='The percentage of the maximum number of pairs in a mini-batch that are considered positive.')
 
     parser.add_argument('--M', type=int, default=2000, required=False,
                         help='Size of the memory queue for the data augmentation method.')
@@ -114,7 +112,7 @@ def argument_parser():
                         help='The clustering network trade-off parameter.')
 
     parser.add_argument('--pseudo_labels_method', type=str, default='top_k_cosine_per_instance', required=False,
-                        choices=['cosine', 'top_k_cosine', 'top_k_cosine_faster', 'top_k_cosine_per_instance', 'ranking'], help='Todo')
+                        choices=['cosine', 'top_k_cosine', 'top_k_cosine_faster', 'top_k_cosine_per_instance', 'ranking'], help='The pseudo labels definition method.')
 
     parser.add_argument('--use_ssl', type=str, default='True',
                         choices=['True', 'False'], help='Use SSL to initialize the encoder or not.')
@@ -190,7 +188,7 @@ if __name__ == '__main__':
 
     # ========================== Step 2 - Joint learning ========================
     logging.info('Starting joint learning...')
-    losses_dict, model = joint_training(model, x_full, y_train, y_train_classifier, x_unlab, y_unlab, x_test, y_test,
+    losses_dict, model = joint_training(model, x_full, y_train_classifier, x_unlab, y_unlab, x_test, y_test,
                                         y_test_classifier, grouped_unknown_class_val, cat_columns_indexes, None, config, device)
     # ===========================================================================
 

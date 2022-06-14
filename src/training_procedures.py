@@ -8,8 +8,29 @@ from src.transforms import *
 from src.utils import *
 
 
-def joint_training(model, x_full, y_train, y_train_classifier, x_unlab, y_unlab, x_test, y_test, y_test_classifier,
+def joint_training(model, x_full, y_train_classifier, x_unlab, y_unlab, x_test, y_test, y_test_classifier,
                    grouped_unknown_class_val, cat_columns_indexes, cat_features_mask, config, device):
+    """
+    The joint training phase of the model. This is where the unknown classes are discovered in *x_unlab*.
+    :param model: torch.nn.Module: The model to evaluate.
+    :param x_full: torch.tensor: The concatenation of x_train and x_unlab.
+    :param y_train_classifier: np.array: The concatenation of y_train and y_unlab, where:
+            1) all the values of y_unlab are replaced with *grouped_unknown_class_val*.
+            and 2) the values of y_train were mapped to [0, |C^l|] using the inverse of *classifier_mapping_dict*.
+    :param x_unlab: torch.tensor: The unknown training data.
+    :param y_unlab: np.array: The unknown training labels.
+    :param x_test: torch.tensor: The testing data.
+    :param y_test: np.array: The testing labels (containing both known and unknown).
+    :param y_test_classifier: np.array: The values of y_test were mapped to [0, |C^l|] using the inverse of *classifier_mapping_dict*.
+    :param grouped_unknown_class_val: int: The value used to replace the classes of y_unlab in y_train_classifier.
+    :param cat_columns_indexes: torch.tensor: The indexes of the one-hot categorical columns of the dataset.
+    :param cat_features_mask: torch.tensor: Same as *cat_columns_indexes* but as a boolean mask.
+    :param config: dict: The dictionary containing the different values of the hyper-parameters.
+    :param device: torch.device: The device to send the dataset to.
+    :return:
+        losses_dict: dict: For every epoch, the metrics are collected and added in this dictionary.
+        model: torch.nn.Module: The trained model.
+    """
     # Compute the top_k from the percentage of the configuration :
     if config['pseudo_labels_method'] == 'top_k_cosine_faster':
         max_topk = (config['batch_size'] * (config['batch_size'] - 1)) / 2
@@ -263,17 +284,18 @@ def joint_training(model, x_full, y_train, y_train_classifier, x_unlab, y_unlab,
 
 def vime_training(x_vime, x_test, model, device, p_m=0.3, alpha=2.0, lr=0.001, num_epochs=30, batch_size=128):
     """
-    ToDo
-    :param x_vime: ToDo
-    :param x_test: ToDo
-    :param model: ToDo
-    :param device: ToDo
-    :param p_m: Loss_tot = Corruption probability
-    :param alpha: Loss_tot = mask_estim_loss + alpha * feature_estim_loss
-    :param lr: ToDo
-    :param num_epochs: ToDo
-    :param batch_size: ToDo
-    :return: ToDo
+    The encoder's initialization phase.
+    :param x_vime: torch.tensor: torch.tensor: The full training data, known or unknown.
+    :param x_test: torch.tensor: torch.tensor: The full testing data, known or unknown.
+    :param model: torch.nn.Module, the torch model to train.
+    :param device: torch.device : The device.
+    :param p_m: float: Corruption probability
+    :param alpha: Loss_vime = mask_estim_loss + alpha * feature_estim_loss
+    :param lr: float: Learning rate of the self-supervised learning phase.
+    :param num_epochs: int: The number of epochs to train.
+    :param batch_size: int: The batch size.
+    :return:
+        losses_dict: dict: For every epoch, the metrics are collected and added in this dictionary.
     """
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 
@@ -339,4 +361,3 @@ def vime_training(x_vime, x_test, model, device, p_m=0.3, alpha=2.0, lr=0.001, n
         losses_dict['epoch_mean_test_losses'].append(test_loss.item())
 
     return losses_dict
-

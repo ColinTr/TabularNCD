@@ -14,9 +14,8 @@ from src.loss_functions import vime_loss
 def setup_device(use_cuda=True):
     """
     Initialize the torch device where the code will be executed on.
-
-    :param use_cuda: Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.
-    :return: torch.device : The initialized device, torch.device.
+    :param use_cuda: bool: Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.
+    :return: torch.device: The initialized device.
     """
     if use_cuda is False or not torch.cuda.is_available():
         device_name = "cpu"
@@ -38,7 +37,7 @@ def setup_device(use_cuda=True):
 def setup_logging_level(level):
     """
     Sets up the logging level.
-    :param level: String, the logging level.
+    :param level: str: the logging level.
     """
     if level == 'debug':
         logging.getLogger().setLevel(logging.DEBUG)
@@ -55,12 +54,11 @@ def pretext_generator(m, x):
     Generation of corrupted samples.
     This is a sped up version of the original pretext_generator of VIME's code.
     It is about 5 times faster and should be equivalent.
-
-    :param m: The corruption mask, np.array with shape (n_samples, n_features).
-    :param x: The set to corrupt, np.array with shape (n_samples, n_features).
+    :param m: np.array: The corruption mask with shape (n_samples, n_features).
+    :param x: np.array: The set to corrupt with shape (n_samples, n_features).
     :return:
-        m_new: The new corruption mask, np.array with shape (n_samples, n_features).
-        x_tilde: The corrupted samples, np.array with shape (n_samples, n_features).
+        m_new: np.array: The new corruption mask with shape (n_samples, n_features).
+        x_tilde: np.array: The corrupted samples with shape (n_samples, n_features).
     """
     # Randomly (and column-wise) shuffle data
     x_bar = x.copy()
@@ -78,15 +76,14 @@ def pretext_generator(m, x):
 def evaluate_vime_model_on_set(x_input, model, device, batch_size=100, p_m=0.3):
     """
     Method that evaluates the feature and mask estimation of corrupted samples of the given model on x_input.
-
-    :param x_input: The input dataset, torch.Tensor of shape (n_samples, n_features).
-    :param model: The model to evaluate, torch.nn.Module.
-    :param device: The device to send the dataset to, torch.device.
-    :param p_m: The corruption probability, int.
-    :param batch_size: The batch size (default=100, reduce if GPU is low on memory), int.
+    :param x_input: torch.tensor: The input dataset of shape (n_samples, n_features).
+    :param model: torch.nn.Module: The model to evaluate.
+    :param device: torch.device: The device to send the dataset to.
+    :param p_m: float: The corruption probability.
+    :param batch_size: int: The batch size (default=100, reduce if GPU is low on memory).
     :return:
-        mean_mask_loss: The mean mask estimation loss, float.
-        mean_feature_loss: The mean feature estimation loss, float.
+        mean_mask_loss: float: The mean mask estimation loss.
+        mean_feature_loss: float: The mean feature estimation loss.
     """
     mask_losses, feature_losses = [], []
     test_batch_start_index, test_batch_end_index = 0, batch_size
@@ -115,16 +112,21 @@ def evaluate_vime_model_on_set(x_input, model, device, batch_size=100, p_m=0.3):
 
 def pretty_mean(my_list):
     """
-    Simple method to avoid displaying error messages when the
-    :param my_list:
-    :return:
+    Simple method to avoid displaying error messages when the list is empty.
+    :param my_list: np.array: The list to compute the mean on.
+    :return: float: The mean of the list. -1 if the list is empty.
     """
     return np.mean(my_list) if len(my_list) > 0 else -1
 
 
 def compute_classification_accuracy(x_test, y_test, y_train, model):
     """
-    ToDo : Documentation
+    From the given model, evaluate its performance on x_test. If needed, the labels are mapped to [0,...,|C^l|] so the model can predict them accurately.
+    :param x_test: torch.tensor: The testing data.
+    :param y_test: np.array: The testing labels.
+    :param y_train: np.array: The training labels.
+    :param model: torch.nn.Module: The model to evaluate.
+    :return: float: The accuracy score between 0 and 1.
     """
     # Define a mapping of the train classes, as they may not range from 0 to C
     mapper, ind = np.unique(y_train, return_inverse=True)
@@ -149,14 +151,13 @@ def compute_classification_accuracy(x_test, y_test, y_train, model):
 
 def compute_clustering_accuracy(x_test, y_test, y_unlab, model):
     """
-    Compute the clustering accuracy.
+    Compute the clustering accuracy of the given model on the unknown classes in x_test.
     The computation is based on the assignment of the most probable clusters using scipy's linear_sum_assignment.
-
-    :param x_test: ToDo : Documentation
-    :param y_test: ToDo : Documentation
-    :param y_unlab: ToDo : Documentation
-    :param model: ToDo : Documentation
-    :return: Accuracy between 0 and 1.
+    :param x_test: torch.tensor: The testing data.
+    :param y_test: np.array: The testing labels.
+    :param y_unlab: np.array: The labels of the unknown classes.
+    :param model: torch.nn.Module: The model to evaluate.
+    :return: float: The clustering accuracy score between 0 and 1.
     """
     # (1) Get the prediction of the model
     x_test_unknown_mask = np.in1d(y_test, np.unique(y_unlab))
@@ -189,14 +190,13 @@ def compute_clustering_accuracy(x_test, y_test, y_unlab, model):
 
 def compute_balanced_clustering_accuracy(x_test, y_test, y_unlab, model):
     """
-    Compute the clustering accuracy.
+    Compute the balanced clustering accuracy.
     The computation is based on the assignment of the most probable clusters using scipy's linear_sum_assignment.
-
-    :param x_test: ToDo : Documentation
-    :param y_test: ToDo : Documentation
-    :param y_unlab: ToDo : Documentation
-    :param model: ToDo : Documentation
-    :return: Accuracy between 0 and 1.
+    :param x_test: torch.tensor: The testing data.
+    :param y_test: np.array: The testing labels.
+    :param y_unlab: np.array: The labels of the unknown classes.
+    :param model: torch.nn.Module: The model to evaluate.
+    :return: float: The balanced clustering accuracy between 0 and 1.
     """
     # (1) Get the prediction of the model
     x_test_unknown_mask = np.in1d(y_test, np.unique(y_unlab))
@@ -229,7 +229,15 @@ def compute_balanced_clustering_accuracy(x_test, y_test, y_unlab, model):
 
 def compute_ari_and_nmi(x_test, y_test, y_unlab, model):
     """
-    ToDo Documentation
+    Compute the Adjusted Rand Index (ARI) and Normalized Mutual Information (NMI) scores of the clustering network.
+    From x_test, only the instances of the unknown classes are evaluated.
+    :param x_test: torch.tensor: The testing data.
+    :param y_test: np.array: The testing labels.
+    :param y_unlab: np.array: The labels of the unknown classes.
+    :param model: torch.nn.Module: The model to evaluate.
+    :return:
+        ari: float: The Adjusted Rand Index score.
+        nmi: float: The Normalized Mutual Information score.
     """
     x_test_known_mask = np.in1d(y_test, np.unique(y_unlab))
     x_test_known = x_test[x_test_known_mask]
@@ -271,6 +279,11 @@ def ranking_stats_pseudo_labels(encoded_x_unlab, device, topk=5):
 
 
 def plot_alternative_joint_learning_metrics(metrics_dict, figure_path):
+    """
+    Simple method to plot the metrics collected during training.
+    :param metrics_dict: dict: The dictionary of metrics for every epoch.
+    :param figure_path: The output path of the figure generated here.
+    """
     f, axes = plt.subplots(3, 3, figsize=(12, 12))
 
     axes[0, 0].plot(range(1, len(metrics_dict['balanced_train_clustering_accuracy']) + 1), metrics_dict['balanced_train_clustering_accuracy'], '-o', label='Train acc.', color='blue')
