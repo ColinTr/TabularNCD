@@ -18,7 +18,7 @@ The datasets are split in this manner:
 
 ![alt text](./figures/illustration_novel_tabular_ncd.png)
 
-Some classes will be set as "unlabelled" and the model won't be able to train using their labels (they will only be used for evaluation during training).
+Some classes will be set as "unlabeled" and the model won't be able to train using their labels (they will only be used for evaluation during training).
 
 Statistical information of the datasets evaluated in the ICDM 2022 paper can be found below:
 

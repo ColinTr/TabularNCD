@@ -327,6 +327,6 @@ def complete_import_procedure(x_train, y_train, x_unlab, y_unlab, x_test, y_test
     logging.info("x_unlab shape: " + str(x_unlab.shape))
     logging.info("x_test shape: " + str(x_test.shape))
 
-    logging.info("Share of unlabelled data: {:.2f}".format((len(x_unlab) / (len(x_train) + len(x_unlab))) * 100) + "%")
+    logging.info("Share of unlabeled data: {:.2f}".format((len(x_unlab) / (len(x_train) + len(x_unlab))) * 100) + "%")
 
     return x_train, y_train, x_unlab, y_unlab, x_test, y_test, x_full, y_full, y_full_classifier, y_train_classifier, y_test_classifier, grouped_unknown_class_val, classifier_mapping_dict

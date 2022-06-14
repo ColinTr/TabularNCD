@@ -8,16 +8,16 @@ class TabularNCDModel(nn.Module):
         """
         The TabularNCD model object. It is composed of 5 main networks : The *encoder*, for SSL the *mask_vector_estimator*
         and *feature_vector_estimator* and for the joint learning the *classification_head* and *clustering_head*.
-        :param encoder_layers_sizes:  The sizes of the encoder's layers. Must include the input and output sizes.
-        :param ssl_layers_sizes: The hidden layers sizes of the mask and feature vector estimators. Do not include input and output sizes.
-        :param joint_learning_layers_sizes: The hidden layers sizes of the classification and clustering networks. Do not include input and output sizes.
-        :param n_known_classes: The number of known classes, or the number of output neurons of the classification head.
-        :param n_unknown_classes: The number of unknown classes, or the number of output neurons of the clustering head.
-        :param activation_fct: The activation function used in the hidden layers of the encoder. Choices : ['relu', 'sigmoid', None].
-        :param encoder_last_activation_fct: The activation function of the very last layer of the encoder. Choices : ['relu', 'sigmoid', None].
-        :param ssl_last_activation_fct: The activation function of the very last layer of the feature estimator network. Choices : ['relu', 'sigmoid', None].
-        :param joint_last_activation_fct: The activation function of the very last layer of the classification and clustering networks. Choices : ['relu', 'sigmoid', None].
-        :param p_dropout: The probability of dropout. Use p_dropout=0 for no dropout.
+        :param encoder_layers_sizes: list(int): The sizes of the encoder's layers. Must include the input and output sizes.
+        :param ssl_layers_sizes: list(int): The hidden layers sizes of the mask and feature vector estimators. Do not include input and output sizes.
+        :param joint_learning_layers_sizes: list(int): The hidden layers sizes of the classification and clustering networks. Do not include input and output sizes.
+        :param n_known_classes: int: The number of known classes, or the number of output neurons of the classification head.
+        :param n_unknown_classes: int: The number of unknown classes, or the number of output neurons of the clustering head.
+        :param activation_fct: The activation function used in the hidden layers of the encoder. Choices: ['relu', 'sigmoid', None].
+        :param encoder_last_activation_fct: The activation function of the very last layer of the encoder. Choices: ['relu', 'sigmoid', None].
+        :param ssl_last_activation_fct: The activation function of the very last layer of the feature estimator network. Choices: ['relu', 'sigmoid', None].
+        :param joint_last_activation_fct: The activation function of the very last layer of the classification and clustering networks. Choices: ['relu', 'sigmoid', None].
+        :param p_dropout: float: The probability of dropout.
         """
         super(TabularNCDModel, self).__init__()
 
@@ -116,7 +116,7 @@ def get_simple_layer(size_in, size_out, add_dropout=True, p_dropout=0.3, activat
     :param size_out:  The output size of the dense layer.
     :param add_dropout: Add a dropout layer of not.
     :param p_dropout: The probability of the dropout layer.
-    :param activation_fct: The activation function. Choices : ['relu', 'sigmoid', None].
+    :param activation_fct: The activation function. Choices: ['relu', 'sigmoid', None].
     :return: List : The layers.
     """
     simple_layer = [nn.Linear(size_in, size_out)]

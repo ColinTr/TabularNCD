@@ -12,7 +12,7 @@ def joint_training(model, x_full, y_train_classifier, x_unlab, y_unlab, x_test, 
                    grouped_unknown_class_val, cat_columns_indexes, cat_features_mask, config, device):
     """
     The joint training phase of the model. This is where the unknown classes are discovered in *x_unlab*.
-    :param model: torch.nn.Module: The model to evaluate.
+    :param model: torch.nn.Module: The model to train.
     :param x_full: torch.tensor: The concatenation of x_train and x_unlab.
     :param y_train_classifier: np.array: The concatenation of y_train and y_unlab, where:
             1) all the values of y_unlab are replaced with *grouped_unknown_class_val*.
@@ -360,22 +360,23 @@ def vime_training(x_vime, x_test, model, device, p_m=0.3, alpha=2.0, lr=0.001, n
     return losses_dict
 
 
-def train_baseline_model(classifier, device, x_train, y_train, x_test, y_test, lr=0.001, num_epochs=30, batch_size=128):
+def train_baseline_model(model, device, x_train, y_train, x_test, y_test, lr=0.001, num_epochs=30, batch_size=128):
     """
-    ToDo
-    :param classifier: ToDo
-    :param device: ToDo
-    :param x_train: ToDo
-    :param y_train: ToDo
-    :param x_test: ToDo
-    :param y_test: ToDo
-    :param lr: ToDo
-    :param num_epochs: ToDo
-    :param batch_size: ToDo
+    The training of the baseline.
+    In short, this is a simple method to train a classifier on a fully-labeled dataset.
+    :param model: torch.nn.Module: The model to train.
+    :param device: torch.device: The device to send the dataset to.
+    :param x_train: torch.tensor: torch.tensor: The training data, known classes only.
+    :param y_train: The training labels, known classes only.
+    :param x_test: torch.tensor: torch.tensor: The testing data, known classes only.
+    :param y_test: np.array: The testing labels, known classes only.
+    :param lr: float: The learning rate.
+    :param num_epochs: int: The number of epochs to train.
+    :param batch_size: int: The batch size.
     :return:
-        ToDo
+        losses_dict: dict: For every epoch, the metrics are collected and added in this dictionary.
     """
-    optimizer = torch.optim.AdamW(classifier.parameters(), lr=lr)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 
     losses_dict = {
         'epoch_mean_train_losses': [],
@@ -400,8 +401,8 @@ def train_baseline_model(classifier, device, x_train, y_train, x_test, y_test, l
                 optimizer.zero_grad()
 
                 # forward
-                encoded_batch_x = classifier.neural_net_forward(batch_x_train)
-                y_pred = classifier.classification_forward(encoded_batch_x)
+                encoded_batch_x = model.neural_net_forward(batch_x_train)
+                y_pred = model.classification_forward(encoded_batch_x)
 
                 # compute loss
                 supervised_loss = nn.CrossEntropyLoss()(y_pred, batch_y_train)
@@ -425,10 +426,10 @@ def train_baseline_model(classifier, device, x_train, y_train, x_test, y_test, l
 
         # Evaluate on the test set
         tmp_y_test = torch.tensor(y_test, dtype=torch.int64, device=device)
-        test_loss = evaluate_supervised_model_loss_on_set(x_test, tmp_y_test, classifier)
+        test_loss = evaluate_supervised_model_loss_on_set(x_test, tmp_y_test, model)
         losses_dict['epoch_mean_test_losses'].append(test_loss.item())
 
-        losses_dict['epoch_mean_train_acc'].append(evaluate_supervised_model_accuracy_on_set(x_train, y_train, classifier))
-        losses_dict['epoch_mean_test_acc'].append(evaluate_supervised_model_accuracy_on_set(x_test, y_test, classifier))
+        losses_dict['epoch_mean_train_acc'].append(evaluate_supervised_model_accuracy_on_set(x_train, y_train, model))
+        losses_dict['epoch_mean_test_acc'].append(evaluate_supervised_model_accuracy_on_set(x_test, y_test, model))
 
     return losses_dict

@@ -231,10 +231,11 @@ def compute_balanced_clustering_accuracy(x_test, y_test, y_unlab, model):
 def hungarian_accuracy(y_true, y_pred):
     """
     Minimal version of the classification after hungarian algorithm used to evaluate the baseline's performance.
-    :param y_true: ToDo
-    :param y_pred: ToDo
+    :param y_true: np.array: The ground truth labels of shape (n_samples,).
+    :param y_pred: np.array: The predicted labels of shape (n_samples,).
     :return:
-        ToDo
+        acc: float: The accuracy.
+        bacc: float: The balanced accuracy.
     """
     y_true = y_true.astype(np.int64)
     assert y_pred.size == y_true.size
@@ -307,7 +308,7 @@ def ranking_stats_pseudo_labels(encoded_x_unlab, device, topk=5):
 
 def plot_alternative_joint_learning_metrics(metrics_dict, figure_path):
     """
-    Simple method to plot the metrics collected during training.
+    Simple method to plot the metrics collected during training of TabularNCD.
     :param metrics_dict: dict: The dictionary of metrics for every epoch.
     :param figure_path: The output path of the figure generated here.
     """
@@ -359,11 +360,9 @@ def plot_alternative_joint_learning_metrics(metrics_dict, figure_path):
 
 def plot_baseline_training_metrics(supervised_losses_dict, figure_path):
     """
-    ToDo
-    :param supervised_losses_dict: ToDo
-    :param figure_path: ToDo
-    :return:
-        ToDo
+    Simple method to plot the metrics collected during training of the baseline.
+    :param supervised_losses_dict: dict: The dictionary of metrics for every epoch.
+    :param figure_path: The output path of the figure generated here.
     """
     f, axes = plt.subplots(1, 2, figsize=(10, 5))
 
@@ -388,13 +387,12 @@ def plot_baseline_training_metrics(supervised_losses_dict, figure_path):
 
 def evaluate_supervised_model_loss_on_set(x_input, y_input, model, batch_size=100):
     """
-    ToDo
-    :param x_input: ToDo
-    :param y_input: ToDo
-    :param model: ToDo
-    :param batch_size: ToDo
-    :return:
-        ToDo
+    Evaluate the cross-entropy loss of the given model on the given dataset.
+    :param x_input: torch.tensor: The input dataset of shape (n_samples, n_features).
+    :param y_input: np.array: The labels of the input dataset of shape (n_samples,).
+    :param model: torch.nn.Module: The model to evaluate.
+    :param batch_size: int: The batch size.
+    :return: float: The mean loss.
     """
     losses = []
     test_batch_start_index, test_batch_end_index = 0, min(batch_size, len(x_input))
@@ -420,13 +418,12 @@ def evaluate_supervised_model_loss_on_set(x_input, y_input, model, batch_size=10
 
 def evaluate_supervised_model_accuracy_on_set(x_input, y_input, model, batch_size=100):
     """
-    ToDo
-    :param x_input: ToDo
-    :param y_input: ToDo
-    :param model: ToDo
-    :param batch_size: ToDo
-    :return:
-        ToDo
+    Evaluate the classification accuracy of the given model on the given dataset.
+    :param x_input: torch.tensor: The input dataset of shape (n_samples, n_features).
+    :param y_input: p.array: The labels of the input dataset of shape (n_samples,).
+    :param model: torch.nn.Module: The model to evaluate.
+    :param batch_size: int: The batch size.
+    :return: float: The mean accuracy.
     """
     accuracies = []
     test_batch_start_index, test_batch_end_index = 0, min(batch_size, len(x_input))

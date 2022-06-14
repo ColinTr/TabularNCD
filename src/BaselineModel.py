@@ -3,10 +3,14 @@ import math
 
 
 class BaselineModel(nn.Module):
-    """
-    ToDo
-    """
     def __init__(self, input_size, n_classes, p_dropout=0.3):
+        """
+        The baseline model object.
+        It is composed of a simple encoder of 2 dense layers and a classification network of a single dense layer.
+        :param input_size: int: The size of the input vectors that will be passed to the model.
+        :param n_classes: int: The number of classes to predict.
+        :param p_dropout: float: The probability of dropout.
+        """
         super(BaselineModel, self).__init__()
 
         self.neural_net = nn.Sequential(
