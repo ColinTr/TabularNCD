@@ -358,3 +358,77 @@ def vime_training(x_vime, x_test, model, device, p_m=0.3, alpha=2.0, lr=0.001, n
         losses_dict['epoch_mean_test_losses'].append(test_loss.item())
 
     return losses_dict
+
+
+def train_baseline_model(classifier, device, x_train, y_train, x_test, y_test, lr=0.001, num_epochs=30, batch_size=128):
+    """
+    ToDo
+    :param classifier: ToDo
+    :param device: ToDo
+    :param x_train: ToDo
+    :param y_train: ToDo
+    :param x_test: ToDo
+    :param y_test: ToDo
+    :param lr: ToDo
+    :param num_epochs: ToDo
+    :param batch_size: ToDo
+    :return:
+        ToDo
+    """
+    optimizer = torch.optim.AdamW(classifier.parameters(), lr=lr)
+
+    losses_dict = {
+        'epoch_mean_train_losses': [],
+        'epoch_mean_test_losses': [],
+        'epoch_mean_train_acc': [],
+        'epoch_mean_test_acc': []
+    }
+
+    for epoch in range(num_epochs):
+        n_batchs = math.ceil((x_train.shape[0]) / batch_size)
+        with tqdm(range(n_batchs)) as t:
+            t.set_description("Epoch " + str(epoch + 1) + " / " + str(num_epochs))
+            train_losses = []
+
+            batch_start_index, batch_end_index = 0, min(batch_size, len(x_train))
+            for batch_index in range(n_batchs):
+                batch_x_train = x_train[batch_start_index:batch_end_index]
+                batch_y_train = y_train[batch_start_index:batch_end_index]
+                batch_y_train = torch.tensor(batch_y_train, dtype=torch.int64, device=device)
+
+                # zero the parameter gradients
+                optimizer.zero_grad()
+
+                # forward
+                encoded_batch_x = classifier.neural_net_forward(batch_x_train)
+                y_pred = classifier.classification_forward(encoded_batch_x)
+
+                # compute loss
+                supervised_loss = nn.CrossEntropyLoss()(y_pred, batch_y_train)
+
+                # backward
+                supervised_loss.backward()
+
+                # update the weights using gradient descent
+                optimizer.step()
+
+                # Save loss for plotting purposes
+                train_losses.append(supervised_loss.item())
+
+                # print statistics
+                t.set_postfix_str("loss={:05.3f}".format(np.mean(train_losses)))
+                t.update()
+                batch_start_index += batch_size
+                batch_end_index = min((batch_end_index + batch_size), x_train.shape[0])
+
+        losses_dict['epoch_mean_train_losses'].append(np.mean(train_losses))
+
+        # Evaluate on the test set
+        tmp_y_test = torch.tensor(y_test, dtype=torch.int64, device=device)
+        test_loss = evaluate_supervised_model_loss_on_set(x_test, tmp_y_test, classifier)
+        losses_dict['epoch_mean_test_losses'].append(test_loss.item())
+
+        losses_dict['epoch_mean_train_acc'].append(evaluate_supervised_model_accuracy_on_set(x_train, y_train, classifier))
+        losses_dict['epoch_mean_test_acc'].append(evaluate_supervised_model_accuracy_on_set(x_test, y_test, classifier))
+
+    return losses_dict

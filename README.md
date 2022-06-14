@@ -65,17 +65,20 @@ You can now install the required libraries inside your virtual environment with:
 Display the help:
 > python TabularNCD.py -h
 
-Execution with the optimized hyper-parameters:
+> python Baseline.py -h
+
+TabularNCD example execution with the optimized hyper-parameters:
 > python TabularNCD.py --dataset_name Pendigits --hyper_parameters_path auto
 
 **Note:** To generate the results of the TabularNCD method from the results table, use the optimized hyper-parameters with the 'auto' value.
 
+Baseline example execution:
+> python Baseline.py --dataset_name Pendigits
 
 -----
 ## Detailed usage
 
-The parameters of the TabularNCD.py script are:
-
+1. **TabularNCD.py**:
     * [required] dataset_name : The name of the dataset.
     * use_cuda : Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.
     * log_lvl : Change the log display level.
@@ -105,6 +108,11 @@ The parameters of the TabularNCD.py script are:
     * use_ssl : Use SSL to initialize the encoder or not.
     * freeze_weights : Freeze the weights of the encoder's layer (except the last one) after SSL initialization or not.
 
+1. **Baseline.py**:
+    * [required] dataset_name : The name of the dataset.
+    * use_cuda : Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.
+    * log_lvl : Change the log display level.
+
 
 -----
 ## Directory structure
@@ -112,7 +120,8 @@ The parameters of the TabularNCD.py script are:
     ├── .gitignore
     ├── README.md                      <- This file
     ├── requirements.txt               <- The required packages
-    ├── TabularNCD.py                  <- The main script to launch
+    ├── TabularNCD.py                  <- The script to run TabularNCD
+    ├── Baseline.py                    <- The script to run the baseline method
     ├── data                           <- The datasets (train & test) in csv, along with the hyper-parameters and links to download
     │   ├── ForestCoverType            <- File is too large, please download and pre-process it before using dataset
     │   ├── HumanActivityRecognition   <- File is too large, please download and pre-process it before using dataset
@@ -153,33 +162,33 @@ For all datasets, the same ranges were explored:
 | Dataset   | Method       | BACC (%) | ACC (%)  | NMI       | ARI       |
 |-----------|--------------|:--------:|:--------:|:---------:|:---------:|
 | MNIST     | Baseline     | 57.7±4.7 | 57.6±4.5 | 0.37±0.20 | 0.31±0.30 |
-| MNIST     | Spect. clust | -        | -        | -         | -         |
-| MNIST     | k-means      | 60.1±0.0 | 61.1±0.0 | 0.48±0.00 | 0.38±0.00 |
-| MNIST     | TabularNCD   | 91.5±4.1 | 91.4±4.2 | 0.82±0.06 | 0.81±0.04 |
+|           | Spect. clust | -        | -        | -         | -         |
+|           | k-means      | 60.1±0.0 | 61.1±0.0 | 0.48±0.00 | 0.38±0.00 |
+|           | TabularNCD   | 91.5±4.1 | 91.4±4.2 | 0.82±0.06 | 0.81±0.04 |
 | Forest    | Baseline     | 55.6±2.0 | 68.5±1.4 | 0.27±0.02 | 0.15±0.01 |
-| Forest    | Spect. clust | 32.1±1.4 | 85.8±4.0 | 0.01±0.01 | 0.09±0.01 |
-| Forest    | k-means      | 32.9±0.0 | 62.0±0.0 | 0.04±0.00 | 0.05±0.00 |
-| Forest    | TabularNCD   | 66.8±0.6 | 92.2±0.2 | 0.37±0.09 | 0.56±0.09 |
+|           | Spect. clust | 32.1±1.4 | 85.8±4.0 | 0.01±0.01 | 0.09±0.01 |
+|           | k-means      | 32.9±0.0 | 62.0±0.0 | 0.04±0.00 | 0.05±0.00 |
+|           | TabularNCD   | 66.8±0.6 | 92.2±0.2 | 0.37±0.09 | 0.56±0.09 |
 | Letter    | Baseline     | 55.7±3.6 | 55.9±3.6 | 0.49±0.04 | 0.33±0.04 |
-| Letter    | Spect. clust | 45.3±4.0 | 45.3±4.0 | 0.48±0.03 | 0.18±0.03 |
-| Letter    | k-means      | 50.2±0.6 | 49.9±0.6 | 0.40±0.01 | 0.28±0.01 |
-| Letter    | TabularNCD   | 71.8±4.5 | 71.8±4.5 | 0.60±0.04 | 0.54±0.04 |
+|           | Spect. clust | 45.3±4.0 | 45.3±4.0 | 0.48±0.03 | 0.18±0.03 |
+|           | k-means      | 50.2±0.6 | 49.9±0.6 | 0.40±0.01 | 0.28±0.01 |
+|           | TabularNCD   | 71.8±4.5 | 71.8±4.5 | 0.60±0.04 | 0.54±0.04 |
 | Human     | Baseline     | 80.0±0.5 | 78.0±0.6 | 0.64±0.01 | 0.62±0.01 |
-| Human     | Spect. clust | 70.2±0.0 | 69.4±0.0 | 0.72±0.00 | 0.60±0.00 |
-| Human     | k-means      | 75.3±0.0 | 77.0±0.0 | 0.62±0.00 | 0.59±0.00 |
-| Human     | TabularNCD   | 98.9±0.2 | 99.0±0.2 | 0.95±0.01 | 0.97±0.01 |
+|           | Spect. clust | 70.2±0.0 | 69.4±0.0 | 0.72±0.00 | 0.60±0.00 |
+|           | k-means      | 75.3±0.0 | 77.0±0.0 | 0.62±0.00 | 0.59±0.00 |
+|           | TabularNCD   | 98.9±0.2 | 99.0±0.2 | 0.95±0.01 | 0.97±0.01 |
 | Satimage  | Baseline     | 53.8±3.4 | 53.9±4.2 | 0.25±0.03 | 0.22±0.03 |
-| Satimage  | Spect. clust | 82.2±0.1 | 77.8±0.1 | 0.51±0.00 | 0.46±0.00 |
-| Satimage  | k-means      | 73.7±0.3 | 69.2±0.2 | 0.30±0.00 | 0.28±0.00 |
-| Satimage  | TabularNCD   | 90.8±4.0 | 91.4±5.0 | 0.71±0.11 | 0.79±0.07 |
+|           | Spect. clust | 82.2±0.1 | 77.8±0.1 | 0.51±0.00 | 0.46±0.00 |
+|           | k-means      | 73.7±0.3 | 69.2±0.2 | 0.30±0.00 | 0.28±0.00 |
+|           | TabularNCD   | 90.8±4.0 | 91.4±5.0 | 0.71±0.11 | 0.79±0.07 |
 | Pendigits | Baseline     | 72.8±5.5 | 72.8±5.4 | 0.62±0.06 | 0.54±0.07 |
-| Pendigits | Spect. clust | 84.0±0.0 | 84.0±0.0 | 0.78±0.00 | 0.67±0.00 |
-| Pendigits | k-means      | 82.5±0.0 | 82.5±0.0 | 0.72±0.00 | 0.63±0.00 |
-| Pendigits | TabularNCD   | 85.5±0.7 | 85.6±0.8 | 0.76±0.02 | 0.71±0.02 |
+|           | Spect. clust | 84.0±0.0 | 84.0±0.0 | 0.78±0.00 | 0.67±0.00 |
+|           | k-means      | 82.5±0.0 | 82.5±0.0 | 0.72±0.00 | 0.63±0.00 |
+|           | TabularNCD   | 85.5±0.7 | 85.6±0.8 | 0.76±0.02 | 0.71±0.02 |
 | Census    | Baseline     | 53.0±3.5 | 55.0±6.5 | 0.49±0.02 | 0.30±0.03 |
-| Census    | Spect. clust | 23.6±3.3 | 51.3±5.5 | 0.24±0.11 | 0.18±0.09 |
-| Census    | k-means      | 38.5±2.6 | 49.8±3.6 | 0.41±0.05 | 0.28±0.03 |
-| Census    | TabularNCD   | 61.9±0.6 | 50.1±0.9 | 0.48±0.01 | 0.30±0.00 |
+|           | Spect. clust | 23.6±3.3 | 51.3±5.5 | 0.24±0.11 | 0.18±0.09 |
+|           | k-means      | 38.5±2.6 | 49.8±3.6 | 0.41±0.05 | 0.28±0.03 |
+|           | TabularNCD   | 61.9±0.6 | 50.1±0.9 | 0.48±0.01 | 0.30±0.00 |
 
 
 -----

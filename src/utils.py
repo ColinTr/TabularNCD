@@ -2,6 +2,7 @@ from sklearn.metrics import accuracy_score, balanced_accuracy_score, adjusted_ra
 from scipy.optimize import linear_sum_assignment as linear_assignment
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
+import torch.nn as nn
 import numpy as np
 import logging
 import torch
@@ -227,6 +228,32 @@ def compute_balanced_clustering_accuracy(x_test, y_test, y_unlab, model):
     return balanced_accuracy_score(y_test_unknown, list(map(permutations_dict.get, model_y_test_unknown_pred)))
 
 
+def hungarian_accuracy(y_true, y_pred):
+    """
+    Minimal version of the classification after hungarian algorithm used to evaluate the baseline's performance.
+    :param y_true: ToDo
+    :param y_pred: ToDo
+    :return:
+        ToDo
+    """
+    y_true = y_true.astype(np.int64)
+    assert y_pred.size == y_true.size
+    D = max(y_pred.max(), y_true.max()) + 1
+    w = np.zeros((D, D), dtype=np.int64)
+    for i in range(y_pred.size):
+        w[y_pred[i], y_true[i]] += 1
+    ind = linear_assignment(w.max() - w)  # The hungarian algorithm
+
+    # Simple accuracy
+    acc = sum([w[i, j] for i, j in zip(ind[0], ind[1])]) * 1.0 / y_pred.size
+
+    # Balanced accuracy
+    permutations_dict = dict(zip(ind[0], ind[1]))
+    bacc = balanced_accuracy_score(y_true, list(map(permutations_dict.get, y_pred)))
+
+    return acc, bacc
+
+
 def compute_ari_and_nmi(x_test, y_test, y_unlab, model):
     """
     Compute the Adjusted Rand Index (ARI) and Normalized Mutual Information (NMI) scores of the clustering network.
@@ -328,3 +355,98 @@ def plot_alternative_joint_learning_metrics(metrics_dict, figure_path):
     plt.tight_layout()
 
     plt.savefig(figure_path, bbox_inches='tight')
+
+
+def plot_baseline_training_metrics(supervised_losses_dict, figure_path):
+    """
+    ToDo
+    :param supervised_losses_dict: ToDo
+    :param figure_path: ToDo
+    :return:
+        ToDo
+    """
+    f, axes = plt.subplots(1, 2, figsize=(10, 5))
+
+    axes[0].plot(range(1, len(supervised_losses_dict['epoch_mean_train_losses']) + 1), supervised_losses_dict['epoch_mean_train_losses'], '-o', label='Train loss')
+    axes[0].plot(range(1, len(supervised_losses_dict['epoch_mean_test_losses']) + 1), supervised_losses_dict['epoch_mean_test_losses'], '-o', label='Test loss')
+    axes[0].set_title('Fine tuning train/test metrics')
+    axes[0].set_xlabel('Epoch')
+    axes[0].set_ylabel('Loss')
+
+    axes[1].plot(range(1, len(supervised_losses_dict['epoch_mean_train_acc']) + 1), supervised_losses_dict['epoch_mean_train_acc'], '-o', label='Train acc.')
+    axes[1].plot(range(1, len(supervised_losses_dict['epoch_mean_test_acc']) + 1), supervised_losses_dict['epoch_mean_test_acc'], '-o', label='Test acc.')
+    axes[1].set_title('Fine tuning train/test metrics')
+    axes[1].set_xlabel('Epoch')
+    axes[1].set_ylabel('Accuracy')
+
+    axes[0].legend()
+    axes[1].legend()
+    plt.tight_layout()
+
+    plt.savefig(figure_path)
+
+
+def evaluate_supervised_model_loss_on_set(x_input, y_input, model, batch_size=100):
+    """
+    ToDo
+    :param x_input: ToDo
+    :param y_input: ToDo
+    :param model: ToDo
+    :param batch_size: ToDo
+    :return:
+        ToDo
+    """
+    losses = []
+    test_batch_start_index, test_batch_end_index = 0, min(batch_size, len(x_input))
+    for batch_index in range(math.ceil((x_input.shape[0]) / batch_size)):
+        batch_x = x_input[test_batch_start_index:test_batch_end_index]
+        batch_y = y_input[test_batch_start_index:test_batch_end_index]
+
+        model.eval()
+        with torch.no_grad():
+            encoded_batch_x = model.neural_net_forward(batch_x)
+            batch_y_pred = model.classification_forward(encoded_batch_x)
+        model.train()
+
+        # ===== Loss
+        supervised_loss = nn.CrossEntropyLoss()(batch_y_pred, batch_y)
+        losses.append(supervised_loss.item())
+
+        test_batch_start_index += batch_size
+        test_batch_end_index = test_batch_end_index + batch_size if test_batch_end_index + batch_size < x_input.shape[0] else x_input.shape[0]
+
+    return np.mean(losses)
+
+
+def evaluate_supervised_model_accuracy_on_set(x_input, y_input, model, batch_size=100):
+    """
+    ToDo
+    :param x_input: ToDo
+    :param y_input: ToDo
+    :param model: ToDo
+    :param batch_size: ToDo
+    :return:
+        ToDo
+    """
+    accuracies = []
+    test_batch_start_index, test_batch_end_index = 0, min(batch_size, len(x_input))
+    for batch_index in range(math.ceil((x_input.shape[0]) / batch_size)):
+        batch_x = x_input[test_batch_start_index:test_batch_end_index]
+        batch_y = y_input[test_batch_start_index:test_batch_end_index]
+
+        model.eval()
+        with torch.no_grad():
+            encoded_batch_x = model.neural_net_forward(batch_x)
+            batch_y_pred = model.classification_forward(encoded_batch_x)
+        model.train()
+
+        # ===== Accuracy
+        batch_y_pred = F.softmax(batch_y_pred, -1)  # Apply softmax
+        batch_y_pred = torch.argmax(batch_y_pred, dim=1)
+
+        accuracies.append(accuracy_score(batch_y, batch_y_pred.cpu()))
+
+        test_batch_start_index += batch_size
+        test_batch_end_index = test_batch_end_index + batch_size if test_batch_end_index + batch_size < x_input.shape[0] else x_input.shape[0]
+
+    return np.mean(accuracies)
