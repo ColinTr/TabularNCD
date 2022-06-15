@@ -132,8 +132,9 @@ Clustering example execution:
     ├── .gitignore
     ├── README.md                      <- This file
     ├── requirements.txt               <- The required packages
-    ├── TabularNCD.py                  <- The script to run TabularNCD
     ├── Baseline.py                    <- The script to run the baseline method
+    ├── Clustering.py                  <- The script to run any of the three clustering methods available
+    ├── TabularNCD.py                  <- The script to run TabularNCD
     ├── data                           <- The datasets (train & test) in csv, along with the hyper-parameters and links to download
     │   ├── ForestCoverType            <- File is too large, please download and pre-process it before using dataset
     │   ├── HumanActivityRecognition   <- File is too large, please download and pre-process it before using dataset
