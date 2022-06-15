@@ -152,9 +152,8 @@ def joint_training(model, x_full, y_train_classifier, x_unlab, y_unlab, x_test, 
                 elif config['pseudo_labels_method'] == 'top_k_cosine':
                     unlab_unlab_combinations_to_compute = np.array(
                         [list(comb) for comb in combinations(list(range(len(encoded_x_unlab))), 2)])
-                    unlab_unlab_similarities = nn.CosineSimilarity()(
-                        encoded_x_unlab[unlab_unlab_combinations_to_compute[:, 0]],
-                        encoded_x_unlab[unlab_unlab_combinations_to_compute[:, 1]])
+                    unlab_unlab_similarities = nn.CosineSimilarity()(encoded_x_unlab[unlab_unlab_combinations_to_compute[:, 0]],
+                                                                     encoded_x_unlab[unlab_unlab_combinations_to_compute[:, 1]])
                     pseudo_labels = torch.zeros(len(unlab_unlab_similarities), device=device)
                     pseudo_labels[unlab_unlab_similarities.argsort(descending=True)[:computed_topk]] = 1
                     bce_loss = unsupervised_classification_loss(y_pred_unlab[unlab_unlab_combinations_to_compute[:, 0]],
@@ -179,12 +178,10 @@ def joint_training(model, x_full, y_train_classifier, x_unlab, y_unlab, x_test, 
                     similarity_matrix += similarity_matrix.T.clone()
 
                     # Get for each instance the cosine_topk most similar
-                    top_k_most_similar_instances_per_instance = similarity_matrix.argsort(descending=True)[:,
-                                                                :computed_topk]
+                    top_k_most_similar_instances_per_instance = similarity_matrix.argsort(descending=True)[:, :computed_topk]
 
                     pseudo_labels_matrix = torch.zeros((len(encoded_x_unlab), len(encoded_x_unlab)), device=device)
-                    pseudo_labels_matrix = pseudo_labels_matrix.scatter_(
-                        index=top_k_most_similar_instances_per_instance, dim=1, value=1)
+                    pseudo_labels_matrix = pseudo_labels_matrix.scatter_(index=top_k_most_similar_instances_per_instance, dim=1, value=1)
 
                     # The matrix isn't symmetric, because the graph is directed
                     # So if there is one link between two points, regardless of the direction, we consider this pair to be positive

@@ -38,7 +38,7 @@ def setup_device(use_cuda=True):
 def setup_logging_level(level):
     """
     Sets up the logging level.
-    :param level: str: the logging level.
+    :param level: str: The logging level.
     """
     if level == 'debug':
         logging.getLogger().setLevel(logging.DEBUG)

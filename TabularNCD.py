@@ -42,7 +42,7 @@ def argument_parser():
                         help='Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.')
 
     parser.add_argument('--log_lvl', type=str, default='info',
-                        choices=["debug", "info", "warning"], required=False,
+                        choices=['debug', 'info', 'warning'], required=False,
                         help='Change the log display level.')
 
     parser.add_argument('--hyper_parameters_path', type=str, default=None, required=False,

@@ -1,12 +1,10 @@
-import torch.nn.functional as F
+from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
+from sklearn.cluster import KMeans
 import numpy as np
 import argparse
 import logging
 import torch
 import os
-
-from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
 
 from src.utils import setup_device, setup_logging_level, plot_baseline_training_metrics, hungarian_accuracy
 from src.training_procedures import train_baseline_model
@@ -18,8 +16,8 @@ def argument_parser():
     """
     A parser to allow the user to easily experiment different parameters along with different datasets.
     """
-    parser = argparse.ArgumentParser(usage='python TabularNCD.py [dataset_name] [options]',
-                                     description='This program allows to run the two training steps of TabularNCD and compute the different performance metrics.')
+    parser = argparse.ArgumentParser(usage='python Baseline.py [dataset_name] [options]',
+                                     description='This program allows to run the baseline and compute the different performance metrics.')
 
     parser.add_argument('--dataset_name', type=str, required=True,
                         choices=['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition', 'Satimage', 'Pendigits', 'USCensus1990'],
@@ -30,7 +28,7 @@ def argument_parser():
                         help='Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.')
 
     parser.add_argument('--log_lvl', type=str, default='info',
-                        choices=["debug", "info", "warning"], required=False,
+                        choices=['debug', 'info', 'warning'], required=False,
                         help='Change the log display level.')
 
     return parser.parse_args()
@@ -91,10 +89,10 @@ if __name__ == '__main__':
     train_acc, train_bacc = hungarian_accuracy(y_unlab, km_y_unlab_pred)
     train_ari = adjusted_rand_score(y_unlab, km_y_unlab_pred)
     train_nmi = normalized_mutual_info_score(y_unlab, km_y_unlab_pred)
-    logging.info("Train clustering accuracy : {:.3f} / balanced acc. : {:.3f} / ari. : {:.3f} / nmi. : {:.3f}".format(train_acc, train_bacc, train_ari, train_nmi))
+    logging.info("Train clustering accuracy: {:.3f} / balanced acc.: {:.3f} / ari.: {:.3f} / nmi.: {:.3f}".format(train_acc, train_bacc, train_ari, train_nmi))
 
     test_acc, test_bacc = hungarian_accuracy(y_test_unknown, km_y_test_unknown_pred)
     test_ari = adjusted_rand_score(y_test_unknown, km_y_test_unknown_pred)
     test_nmi = normalized_mutual_info_score(y_test_unknown, km_y_test_unknown_pred)
-    logging.info("Test clustering accuracy : {:.3f} / balanced acc. : {:.3f} / ari. : {:.3f} / nmi. : {:.3f}".format(test_acc, test_bacc, test_ari, test_nmi))
+    logging.info("Test clustering accuracy: {:.3f} / balanced acc.: {:.3f} / ari.: {:.3f} / nmi.: {:.3f}".format(test_acc, test_bacc, test_ari, test_nmi))
     # ===========================================================================

@@ -67,6 +67,8 @@ Display the help:
 
 > python Baseline.py -h
 
+> python Clustering.py -h
+
 TabularNCD example execution with the optimized hyper-parameters:
 > python TabularNCD.py --dataset_name Pendigits --hyper_parameters_path auto
 
@@ -75,13 +77,16 @@ TabularNCD example execution with the optimized hyper-parameters:
 Baseline example execution:
 > python Baseline.py --dataset_name Pendigits
 
+Clustering example execution:
+> python Clustering.py --dataset_name Pendigits --method kmeans --n_runs 5
+
 -----
 ## Detailed usage
 
 1. **TabularNCD.py**:
-    * [required] dataset_name : The name of the dataset.
-    * use_cuda : Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.
-    * log_lvl : Change the log display level.
+    * [required] dataset_name : The name of the dataset. Choices = ['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition', 'Satimage', 'Pendigits', 'USCensus1990'].
+    * use_cuda : Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU. Choices = ['True', 'False'].
+    * log_lvl : Change the log display level. Choices = ['debug', 'info', 'warning'].
     * hyper_parameters_path : Path to the hyper-params file. Set to 'auto' to find it in .\data\dataset_name\hyperparameters.json
     * ssl_lr : Learning rate of the mode in the self-supervised learning phase.
     * lr_classif : Learning rate of the classification network in the joint learning phase.
@@ -106,13 +111,20 @@ Baseline example execution:
     * w2 : The clustering network trade-off parameter.
     * pseudo_labels_method : The pseudo labels definition method. Default = 'top_k_cosine_per_instance'. Choices = ['cosine', 'top_k_cosine', 'top_k_cosine_faster', 'top_k_cosine_per_instance', 'ranking'].
     * use_ssl : Use SSL to initialize the encoder or not.
-    * freeze_weights : Freeze the weights of the encoder's layer (except the last one) after SSL initialization or not.
+    * freeze_weights : Freeze the weights of the encoder's layer (except the last one) after SSL initialization or not. Choices = ['True', 'False'].
 
-1. **Baseline.py**:
-    * [required] dataset_name : The name of the dataset.
-    * use_cuda : Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU.
-    * log_lvl : Change the log display level.
+2. **Baseline.py**:
+    * [required] dataset_name : The name of the dataset. Choices = ['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition', 'Satimage', 'Pendigits', 'USCensus1990'].
+    * use_cuda : Set to True if you want the code to be run on your GPU. If set to False, code will run on CPU. Choices = ['True', 'False'].
+    * log_lvl : Change the log display level. Choices = ['debug', 'info', 'warning'].
 
+3. **Clustering.py**
+   * [required] dataset_name : The name of the dataset. Choices = ['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition', 'Satimage', 'Pendigits', 'USCensus1990'].
+   * [required] method : The clustering method to use. 'sc' refers to Spectral Clustering, and can be used with either the default implementation or the cosine similarity matrix. Choices = ['kmeans', 'default_sc', 'cosine_sc'].
+   * log_lvl : Change the log display level. Choices = ['debug', 'info', 'warning'].
+   * train_or_test : Compute on either the train or the test split. Choices = ['train', 'test'].
+   * k_clusters : The number of clusters to used. Default is the ground truth.
+   * n_runs : The number of executions, the results will be averaged.
 
 -----
 ## Directory structure
