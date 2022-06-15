@@ -145,10 +145,11 @@ Clustering example execution:
     │   └── USCensus1990               <- File is too large, please download and pre-process it before using dataset
     ├── figures                        <- The training metrics curves
     └── src                            <- The source code of the project
+        ├── BaselineModel.py           <- The Baseline model class
         ├── import_utils.py            <- The functions to import the different datasets used here
         ├── loss_functions.py          <- The loss functions used in training
         ├── ncl_memory_module.py       <- A simple class to store the M most recent training instances from the previous batches
-        ├── TabularNCDModel.py         <- The TabularNCD model clas
+        ├── TabularNCDModel.py         <- The TabularNCD model class
         ├── training_procedures.py     <- The SSL and joint training methods
         ├── transforms.py              <- The data augmentation methods
         └── utils.py                   <- Diverse useful functions
