@@ -130,29 +130,30 @@ Clustering example execution:
 ## Directory structure
     .
     ├── .gitignore
-    ├── README.md                      <- This file
-    ├── requirements.txt               <- The required packages
-    ├── Baseline.py                    <- The script to run the baseline method
-    ├── Clustering.py                  <- The script to run any of the three clustering methods available
-    ├── TabularNCD.py                  <- The script to run TabularNCD
-    ├── data                           <- The datasets (train & test) in csv, along with the hyper-parameters and links to download
-    │   ├── ForestCoverType            <- File is too large, please download and pre-process it before using dataset
-    │   ├── HumanActivityRecognition   <- File is too large, please download and pre-process it before using dataset
-    │   ├── LetterRecognition          <- Dataset available
-    │   ├── mnist                      <- Dataset available
-    │   ├── Pendigits                  <- Dataset available
-    │   ├── Satimage                   <- Dataset available
-    │   └── USCensus1990               <- File is too large, please download and pre-process it before using dataset
-    ├── figures                        <- The training metrics curves
-    └── src                            <- The source code of the project
-        ├── BaselineModel.py           <- The Baseline model class
-        ├── import_utils.py            <- The functions to import the different datasets used here
-        ├── loss_functions.py          <- The loss functions used in training
-        ├── ncl_memory_module.py       <- A simple class to store the M most recent training instances from the previous batches
-        ├── TabularNCDModel.py         <- The TabularNCD model class
-        ├── training_procedures.py     <- The SSL and joint training methods
-        ├── transforms.py              <- The data augmentation methods
-        └── utils.py                   <- Diverse useful functions
+    ├── README.md                              <- This file
+    ├── Supplementary_Materials_TabularNCD.pdf <- The supplementary materials
+    ├── requirements.txt                       <- The required packages
+    ├── Baseline.py                            <- The script to run the baseline method
+    ├── Clustering.py                          <- The script to run any of the three clustering methods available
+    ├── TabularNCD.py                          <- The script to run TabularNCD
+    ├── data                                   <- The datasets (train & test) in csv, along with the hyper-parameters and links to download
+    │   ├── ForestCoverType                    <- File is too large, please download and pre-process it before using dataset
+    │   ├── HumanActivityRecognition           <- File is too large, please download and pre-process it before using dataset
+    │   ├── LetterRecognition                  <- Dataset available
+    │   ├── mnist                              <- Dataset available
+    │   ├── Pendigits                          <- Dataset available
+    │   ├── Satimage                           <- Dataset available
+    │   └── USCensus1990                       <- File is too large, please download and pre-process it before using dataset
+    ├── figures                                <- The training metrics curves
+    └── src                                    <- The source code of the project
+        ├── BaselineModel.py                   <- The Baseline model class
+        ├── import_utils.py                    <- The functions to import the different datasets used here
+        ├── loss_functions.py                  <- The loss functions used in training
+        ├── ncl_memory_module.py               <- A simple class to store the M most recent training instances from the previous batches
+        ├── TabularNCDModel.py                 <- The TabularNCD model class
+        ├── training_procedures.py             <- The SSL and joint training methods
+        ├── transforms.py                      <- The data augmentation methods
+        └── utils.py                           <- Diverse useful functions
 
 
 -----
@@ -208,6 +209,4 @@ For all datasets, the same ranges were explored:
 -----
 ## Supplementary materials
 
-(Coming very soon)
-
-ToDo experiments comparing lambda threshold pseudo labels definition method vs cosine topk...
+See the file ./Supplementary_Materials_TabularNCD.pdf
