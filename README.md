@@ -51,10 +51,7 @@ You will first need to install *virtualenv* with pip:
 Then create the virtual environment:
 > virtualenv my_python_environment
 
-Finally, activate it. On Linux:
-> source my_python_environment/bin/activate
-
-Or on Windows:
+Finally, activate it:
 > .\my_python_environment\Scripts\activate
 
 At this point, you should see the name of your virtual environment in parentheses on your terminal line.
