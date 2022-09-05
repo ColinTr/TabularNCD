@@ -41,7 +41,7 @@ The second is another classification network trained to  predict the novel class
 
 
 -----
-## Virtualenv creation and packages installation
+## Note : Virtualenv creation and packages installation
 This project was written using **python 3.7.9**. The libraries are described in requirements.txt.
 
 It is recommended to create a virtual environment with *virtualenv* to install the exact versions of the packages used in this project.
@@ -51,8 +51,11 @@ You will first need to install *virtualenv* with pip:
 Then create the virtual environment:
 > virtualenv my_python_environment
 
-Finally, activate it using :
+Finally, activate it. On Linux:
 > source my_python_environment/bin/activate
+
+Or on Windows:
+> .\my_python_environment\Scripts\activate
 
 At this point, you should see the name of your virtual environment in parentheses on your terminal line.
 
