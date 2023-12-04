@@ -1,5 +1,7 @@
 # TabularNCD :  A Method for Discovering Novel Classes in Tabular Data
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Table of contents
   * [How the method works](#how-the-method-works)
   * [Virtualenv creation and packages installation](#virtualenv-creation-and-packages-installation)
@@ -210,3 +212,24 @@ For all datasets, the same ranges were explored:
 ## Supplementary materials
 
 See the file ./Supplementary_Materials_TabularNCD.pdf
+
+
+## Citation
+If you found this work useful, please use the following citation:
+```
+@inproceedings{tr2022method,
+   title = {A Method for Discovering Novel Classes in Tabular Data},
+   author = {Troisemaine, Colin and Flocon{-}Cholet, Joachim and Gosselin, St{'{e}}phane and Vaton, Sandrine and Reiffers{-}Masson, Alexandre and Lemaire, Vincent},
+   booktitle = {{IEEE} International Conference on Knowledge Graph, {ICKG}},
+   pages = {265--274},
+   publisher = {{IEEE}},
+   year = {2022},
+   doi = {10.1109/ICKG55886.2022.00041}
+}
+```
+
+## License
+
+Copyright (c) 2023 Orange.
+
+This code is released under the MIT license. See the LICENSE file for more information.
