@@ -1,20 +1,18 @@
-# TabularNCD :  A Method for Discovering Novel Classes in Tabular Data
+<h1 align="center">
+  TabularNCD
+</h1>
+  
+<p align="center">
+  Code used to generate the results of the ICKG conference paper <a href="https://arxiv.org/abs/2209.01217">A Method for Discovering Novel Classes in Tabular Data</a>
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-Table of contents
-  * [How the method works](#how-the-method-works)
-  * [Virtualenv creation and packages installation](#virtualenv-creation-and-packages-installation)
-  * [Script usage example](#script-usage-example)
-  * [Detailed usage](#detailed-usage)
-  * [Directory structure](#directory-structure)
-  * [Explored hyper-parameters values ranges](#explored-hyper-parameters-values-ranges)
-  * [Results](#results)
-  * [Supplementary materials](#supplementary-materials)
+<div align="center">
+ 
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+</div>
 
 
------
-## How the method works
+## 🔍 Principle behind the method
 
 The datasets are split in this manner:
 
@@ -42,8 +40,8 @@ The first is a classification network trained to predict 1) the known classes fr
 The second is another classification network trained to  predict the novel classes from x_unlab.
 
 
------
-## Note : Virtualenv creation and packages installation
+## 🐍 Setting up the Python environment
+
 This project was written using **python 3.7.9**. The libraries are described in requirements.txt.
 
 It is recommended to create a virtual environment with *virtualenv* to install the exact versions of the packages used in this project.
@@ -62,8 +60,8 @@ You can now install the required libraries inside your virtual environment with:
 > pip install -r requirements.txt
 
 
------
-## Script usage example
+## 💻 Script usage example
+
 Display the help:
 > python TabularNCD.py -h
 
@@ -82,8 +80,8 @@ Baseline example execution:
 Clustering example execution:
 > python Clustering.py --dataset_name Pendigits --method kmeans --n_runs 5
 
------
-## Detailed usage
+
+## 📋 Detailed usage
 
 1. **TabularNCD.py**:
     * [required] dataset_name : The name of the dataset. Choices = ['mnist', 'ForestCoverType', 'LetterRecognition', 'HumanActivityRecognition', 'Satimage', 'Pendigits', 'USCensus1990'].
@@ -128,8 +126,8 @@ Clustering example execution:
    * k_clusters : The number of clusters to used. Default is the ground truth.
    * n_runs : The number of executions, the results will be averaged.
 
------
-## Directory structure
+
+## 📂 Directory structure
     .
     ├── .gitignore
     ├── README.md                              <- This file
@@ -158,8 +156,8 @@ Clustering example execution:
         └── utils.py                           <- Diverse useful functions
 
 
------
-## Explored hyper-parameters values ranges
+
+## 📈 Hyper-parameters values ranges
 
 For all datasets, the same ranges were explored:
 
@@ -173,8 +171,7 @@ For all datasets, the same ranges were explored:
   * activation_fct : One of [Sigmoid, ReLU, None].
 
 
------
-## Results
+## 📊 Results
 
 | Dataset   | Method       | BACC (%) | ACC (%)  | NMI       | ARI       |
 |-----------|--------------|:--------:|:--------:|:---------:|:---------:|
@@ -208,13 +205,13 @@ For all datasets, the same ranges were explored:
 |           | TabularNCD   | 61.9±0.6 | 50.1±0.9 | 0.48±0.01 | 0.30±0.00 |
 
 
------
-## Supplementary materials
+## 📑 Supplementary materials
 
 See the file ./Supplementary_Materials_TabularNCD.pdf
 
 
-## Citation
+## 📜 Citation
+
 If you found this work useful, please use the following citation:
 ```
 @inproceedings{tr2022method,
@@ -228,7 +225,7 @@ If you found this work useful, please use the following citation:
 }
 ```
 
-## License
+## ⚖️ License
 
 Copyright (c) 2023 Orange.
 
